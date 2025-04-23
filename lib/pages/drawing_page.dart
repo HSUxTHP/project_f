@@ -4,6 +4,7 @@ import '../models/frame_data.dart';
 import '../utils/thumbnail_rendrer.dart';
 import '../widgets/drawing_canvas.dart';
 import '../utils/tweening.dart';
+import '../widgets/second_top_toolbar.dart';
 
 class DrawingPage extends StatefulWidget {
   const DrawingPage({super.key});
@@ -121,36 +122,51 @@ class _DrawingPageState extends State<DrawingPage> {
     final currentFrame = _frames[_currentFrameIndex];
 
     return Scaffold(
+      backgroundColor: Color(0xFF111318),
       appBar: AppBar(
-        title: const Text('🎨 Animation Sketch'),
+        backgroundColor: Color(0xFF43474E),
+        title: const Text(
+          'Drawing Animation',
+          style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFFE1E2E9)
+          ),
+        ),
         actions: [
-          IconButton(icon: const Icon(Icons.copy), onPressed: _copyFrame),
-          IconButton(icon: const Icon(Icons.paste), onPressed: _pasteFrame),
-          IconButton(icon: const Icon(Icons.auto_fix_high), onPressed: _generateTween),
+          IconButton(icon: const Icon(Icons.copy,color: Color(0xFFE1E2E9)), onPressed: _copyFrame),
+          IconButton(icon: const Icon(Icons.paste,color: Color(0xFFE1E2E9)), onPressed: _pasteFrame),
+          IconButton(icon: const Icon(Icons.auto_fix_high,color: Color(0xFFE1E2E9)), onPressed: _generateTween),
           IconButton(
-            icon: Icon(_showOnionSkin ? Icons.layers_clear : Icons.layers),
+            icon: Icon(_showOnionSkin ? Icons.layers_clear : Icons.layers,color: Color(0xFFE1E2E9)),
             onPressed: () => setState(() => _showOnionSkin = !_showOnionSkin),
           ),
           PopupMenuButton<int>(
             initialValue: _onionSkinCount,
-            icon: const Icon(Icons.filter_frames),
+            icon: const Icon(Icons.filter_frames,color: Color(0xFFE1E2E9)),
             onSelected: (val) => setState(() => _onionSkinCount = val),
             itemBuilder: (context) => [
               for (int i = 1; i <= 5; i++) PopupMenuItem(value: i, child: Text('$i Onion Frame')),
             ],
           ),
           IconButton(
-            icon: Icon(_isPlaying ? Icons.stop : Icons.play_arrow),
+            icon: Icon(_isPlaying ? Icons.stop : Icons.play_arrow,color: Color(0xFFE1E2E9)),
             onPressed: _togglePlay,
           ),
         ],
       ),
-      body: Row(
+      body: Column(
+          children: [
+      SecondTopToolbar(), //TODO:ai biết gì đâu :v
+    // Body chính
+    Expanded(
+    child: Row(
         children: [
           if (_showFrameList)
             Container(
+              margin: const EdgeInsets.only(right: 4, top: 4),
               width: 240,
-              color: Colors.grey[100],
+              color: Color(0xFF43474E),
               child: Stack(
                 children: [
                   Padding(
@@ -231,7 +247,7 @@ class _DrawingPageState extends State<DrawingPage> {
                     top: 4,
                     right: 4,
                     child: IconButton(
-                      icon: const Icon(Icons.menu_open, size: 30),
+                      icon: const Icon(Icons.menu_open, size: 30, color: Color(0xFFE1E2E9)),
                       onPressed: () => setState(() => _showFrameList = false),
                     ),
                   ),
@@ -256,6 +272,9 @@ class _DrawingPageState extends State<DrawingPage> {
             ),
           if (_showFrameList) Expanded(child: _buildCanvas(currentFrame)),
         ],
+      ),
+    ),
+  ],
       ),
     );
   }
