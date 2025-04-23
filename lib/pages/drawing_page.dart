@@ -12,7 +12,7 @@ class DrawingPage extends StatefulWidget {
   @override
   State<DrawingPage> createState() => _DrawingPageState();
 }
-
+//This is Draw Page
 class _DrawingPageState extends State<DrawingPage> {
   final List<FrameData> _frames = [];
   int _currentFrameIndex = 0;
