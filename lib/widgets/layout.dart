@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_testing/pages/community_page.dart';
 import 'package:flutter_testing/pages/home_page.dart';
+import 'package:flutter_testing/pages/profile_page.dart';
 
-class Layout extends StatelessWidget {
+class Layout extends StatefulWidget {
   const Layout({super.key});
 
+  @override
+  State<Layout> createState() => _LayoutState();
+}
+
+class _LayoutState extends State<Layout> {
+  List<Widget> pages = [
+    HomePage(),
+    CommunityPage(),
+    ProfilePage()
+  ];
+
+  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +45,6 @@ class Layout extends StatelessWidget {
               width: MediaQuery.sizeOf(context).width * 0.5,
               child: SearchBar(
                   trailing: [Icon(Icons.search),],
-                padding: MaterialStateProperty.all(EdgeInsets.all(0))
               ),
             ),
             ClipRRect(
@@ -50,94 +63,92 @@ class Layout extends StatelessWidget {
         children: [
           Expanded(
             flex: 1,
-            child: Drawer(
-              shape: RoundedRectangleBorder(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black,
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(0),
                   bottomRight: Radius.circular(0),
                 ),
               ),
-              backgroundColor: Colors.black,
-              child: Column(
+              child: ListView(
                 children: [
-                  Expanded(
-                    child: ListView(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          child: Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.home, color: Colors.white, size: 28),
-                                SizedBox(height: 4),
-                                Text(
-                                  "Home",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        _currentIndex = 0;
+                      });
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.home, color: Colors.white, size: 28),
+                            SizedBox(height: 4),
+                            Text("Home", style: TextStyle(color: Colors.white, fontSize: 12)),
+                          ],
                         ),
-                        Divider(color: Colors.grey),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          child: Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.question_mark,
-                                  color: Colors.white,
-                                  size: 28,
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  "Community",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                      ),
+                    ),
+                  ),
+                  Divider(color: Colors.grey),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        _currentIndex = 1;
+                      });
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.question_mark, color: Colors.white, size: 28),
+                            SizedBox(height: 4),
+                            Text("Community", style: TextStyle(color: Colors.white, fontSize: 12)),
+                          ],
                         ),
-                        Divider(color: Colors.grey),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          child: Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.person,
-                                  color: Colors.white,
-                                  size: 28,
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  "Profile",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
+                      ),
+                    ),
+                  ),
+                  Divider(color: Colors.grey),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        _currentIndex = 2;
+                      });
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.person, color: Colors.white, size: 28),
+                            SizedBox(height: 4),
+                            Text(
+                              "Profile",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          Expanded(flex: 10, child: HomePage()),
+          Expanded(
+              flex: 10,
+              child: pages[_currentIndex],
+          ),
         ],
       ),
     );
