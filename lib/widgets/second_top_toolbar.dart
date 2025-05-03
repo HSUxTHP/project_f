@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class SecondTopToolbar extends StatelessWidget {
   const SecondTopToolbar({super.key});
@@ -47,18 +48,18 @@ class SecondTopToolbar extends StatelessWidget {
           ),
           const VerticalDivider(),
           IconButton(
-            icon: const Icon(Icons.question_mark),
+            icon: const Icon(Symbols.diagonal_line),
             color: Color(0xFFE1E2E9),
             onPressed: () {}, // TODO: Add logic
           ),
           IconButton(
-            icon: const Icon(Icons.question_mark),
+            icon: const Icon(Symbols.conversion_path),
             color: Color(0xFFE1E2E9),
             onPressed: () {}, // TODO: Add logic
           ),
           const VerticalDivider(),
           IconButton(
-            icon: const Icon(Icons.question_mark),
+            icon: const Icon(Symbols.stylus),
             color: Color(0xFFE1E2E9),
             onPressed: () {}, // TODO: Add logic
           ),
@@ -68,12 +69,12 @@ class SecondTopToolbar extends StatelessWidget {
             onPressed: () {}, // TODO: Add color logic
           ),
           IconButton(
-            icon: const Icon(Icons.question_mark),
+            icon: const Icon(Symbols.match_case),
             color: Color(0xFFE1E2E9),
             onPressed: () {}, // TODO: Add logic
           ),
           IconButton(
-            icon: const Icon(Icons.question_mark),
+            icon: const Icon(Symbols.ink_eraser),
             color: Color(0xFFE1E2E9),
             onPressed: () {}, // TODO: Add logic
           ),

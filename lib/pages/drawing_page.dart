@@ -20,11 +20,14 @@ class _DrawingPageState extends State<DrawingPage> {
   Color _selectedColor = Colors.black;
   double _strokeWidth = 4.0;
   bool _isEraser = false;
-  final TextEditingController _fpsController = TextEditingController(text: '12');
+  final TextEditingController _fpsController = TextEditingController(
+    text: '12',
+  );
   bool _showOnionSkin = true;
   int _onionSkinCount = 2;
   FrameData? _copiedFrame;
   bool _showFrameList = true;
+  String _viewMode = 'frame';
 
   @override
   void initState() {
@@ -88,7 +91,9 @@ class _DrawingPageState extends State<DrawingPage> {
 
     if (a.strokes.isEmpty || b.strokes.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('⚠️ Cần có nội dung ở cả 2 frame để tween')),
+        const SnackBar(
+          content: Text('⚠️ Cần có nội dung ở cả 2 frame để tween'),
+        ),
       );
       return;
     }
@@ -110,9 +115,9 @@ class _DrawingPageState extends State<DrawingPage> {
       _currentFrameIndex += 1;
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('✅ Đã thêm tween frames')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('✅ Đã thêm tween frames')));
   }
 
   void _selectFrame(int index) => setState(() => _currentFrameIndex = index);
@@ -128,153 +133,257 @@ class _DrawingPageState extends State<DrawingPage> {
         title: const Text(
           'Drawing Animation',
           style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFFE1E2E9)
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFFE1E2E9),
           ),
         ),
         actions: [
-          IconButton(icon: const Icon(Icons.copy,color: Color(0xFFE1E2E9)), onPressed: _copyFrame),
-          IconButton(icon: const Icon(Icons.paste,color: Color(0xFFE1E2E9)), onPressed: _pasteFrame),
-          IconButton(icon: const Icon(Icons.auto_fix_high,color: Color(0xFFE1E2E9)), onPressed: _generateTween),
           IconButton(
-            icon: Icon(_showOnionSkin ? Icons.layers_clear : Icons.layers,color: Color(0xFFE1E2E9)),
+            icon: const Icon(Icons.copy, color: Color(0xFFE1E2E9)),
+            onPressed: _copyFrame,
+          ),
+          IconButton(
+            icon: const Icon(Icons.paste, color: Color(0xFFE1E2E9)),
+            onPressed: _pasteFrame,
+          ),
+          IconButton(
+            icon: const Icon(Icons.auto_fix_high, color: Color(0xFFE1E2E9)),
+            onPressed: _generateTween,
+          ),
+          IconButton(
+            icon: Icon(
+              _showOnionSkin ? Icons.layers_clear : Icons.layers,
+              color: Color(0xFFE1E2E9),
+            ),
             onPressed: () => setState(() => _showOnionSkin = !_showOnionSkin),
           ),
           PopupMenuButton<int>(
             initialValue: _onionSkinCount,
-            icon: const Icon(Icons.filter_frames,color: Color(0xFFE1E2E9)),
+            icon: const Icon(Icons.filter_frames, color: Color(0xFFE1E2E9)),
             onSelected: (val) => setState(() => _onionSkinCount = val),
-            itemBuilder: (context) => [
-              for (int i = 1; i <= 5; i++) PopupMenuItem(value: i, child: Text('$i Onion Frame')),
-            ],
+            itemBuilder:
+                (context) => [
+                  for (int i = 1; i <= 5; i++)
+                    PopupMenuItem(value: i, child: Text('$i Onion Frame')),
+                ],
           ),
           IconButton(
-            icon: Icon(_isPlaying ? Icons.stop : Icons.play_arrow,color: Color(0xFFE1E2E9)),
+            icon: Icon(
+              _isPlaying ? Icons.stop : Icons.play_arrow,
+              color: Color(0xFFE1E2E9),
+            ),
             onPressed: _togglePlay,
           ),
         ],
       ),
       body: Column(
-          children: [
-      SecondTopToolbar(), //TODO:ai biết gì đâu :v
-    // Body chính
-    Expanded(
-    child: Row(
         children: [
-          if (_showFrameList)
-            Container(
-              margin: const EdgeInsets.only(right: 4, top: 4),
-              width: 240,
-              color: Color(0xFF43474E),
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 48),
-                    child: ListView.builder(
-                      padding: const EdgeInsets.only(bottom: 80),
-                      itemCount: _frames.length,
-                      itemBuilder: (context, index) {
-                        final frame = _frames[index];
-                        final isSelected = index == _currentFrameIndex;
-
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                          child: Stack(
-                            children: [
-                              GestureDetector(
-                                onTap: () => _selectFrame(index),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: isSelected ? Colors.blueAccent : Colors.grey.shade300,
-                                      width: 3,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        blurRadius: 4,
-                                        offset: Offset(0, 2),
-                                      )
-                                    ],
-                                    color: Colors.white,
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: AspectRatio(
-                                      aspectRatio: 1.5,
-                                      child: frame.image.isNotEmpty
-                                          ? Image.memory(frame.image, fit: BoxFit.cover)
-                                          : Container(
-                                        alignment: Alignment.center,
-                                        color: Colors.grey[200],
-                                        child: const Icon(Icons.image_not_supported, color: Colors.grey),
-                                      ),
+          SecondTopToolbar(), //TODO:ai biết gì đâu :v
+          // Body chính
+          Expanded(
+            child: Row(
+              children: [
+                if (_showFrameList)
+                  Container(
+                    margin: const EdgeInsets.only(right: 4, top: 4),
+                    width: 240,
+                    color: Color(0xFF43474E),
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            color: const Color(0xFF43474E),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _viewMode = 'frame';
+                                    });
+                                  },
+                                  child: Text(
+                                    'Frame',
+                                    style: TextStyle(
+                                      color:
+                                          _viewMode == 'frame'
+                                              ? Colors.white
+                                              : Colors.grey[400],
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                              ),
-                              Positioned(
-                                top: 6,
-                                right: 6,
-                                child: GestureDetector(
-                                  onTap: () => _deleteFrame(index),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.redAccent,
-                                      shape: BoxShape.circle,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black26,
-                                          blurRadius: 4,
-                                          offset: Offset(0, 2),
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _viewMode = 'layout';
+                                    });
+                                  },
+                                  child: Text(
+                                    'Layout',
+                                    style: TextStyle(
+                                      color:
+                                          _viewMode == 'layout'
+                                              ? Colors.white
+                                              : Colors.grey[400],
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        _viewMode == "frame"
+                            ? Padding(
+                              padding: const EdgeInsets.only(top: 48),
+                              child: ListView.builder(
+                                padding: const EdgeInsets.only(bottom: 80),
+                                itemCount: _frames.length,
+                                itemBuilder: (context, index) {
+                                  final frame = _frames[index];
+                                  final isSelected =
+                                      index == _currentFrameIndex;
+
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 10,
+                                    ),
+                                    child: Stack(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () => _selectFrame(index),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              border: Border.all(
+                                                color:
+                                                    isSelected
+                                                        ? Colors.blueAccent
+                                                        : Colors.grey.shade300,
+                                                width: 3,
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black12,
+                                                  blurRadius: 4,
+                                                  offset: Offset(0, 2),
+                                                ),
+                                              ],
+                                              color: Colors.white,
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: AspectRatio(
+                                                aspectRatio: 1.5,
+                                                child:
+                                                    frame.image.isNotEmpty
+                                                        ? Image.memory(
+                                                          frame.image,
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                        : Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          color:
+                                                              Colors.grey[200],
+                                                          child: const Icon(
+                                                            Icons
+                                                                .image_not_supported,
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          top: 6,
+                                          right: 6,
+                                          child: GestureDetector(
+                                            onTap: () => _deleteFrame(index),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.redAccent,
+                                                shape: BoxShape.circle,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black26,
+                                                    blurRadius: 4,
+                                                    offset: Offset(0, 2),
+                                                  ),
+                                                ],
+                                              ),
+                                              padding: const EdgeInsets.all(6),
+                                              child: const Icon(
+                                                Icons.delete,
+                                                size: 16,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
-                                    padding: const EdgeInsets.all(6),
-                                    child: const Icon(Icons.delete, size: 16, color: Colors.white),
-                                  ),
-                                ),
+                                  );
+                                },
                               ),
-                            ],
+                            )
+                            : const Padding(
+                              padding: EdgeInsets.only(top: 48),
+                              child: Center(
+                                child: Placeholder() //TODO: Replace layout view code
+                              ),
+                            ),
+                        Positioned(
+                          top: 4,
+                          right: 4,
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.menu_open,
+                              size: 30,
+                              color: Color(0xFFE1E2E9),
+                            ),
+                            onPressed:
+                                () => setState(() => _showFrameList = false),
                           ),
-                        );
-                      },
+                        ),
+                      ],
                     ),
                   ),
-                  Positioned(
-                    top: 4,
-                    right: 4,
-                    child: IconButton(
-                      icon: const Icon(Icons.menu_open, size: 30, color: Color(0xFFE1E2E9)),
-                      onPressed: () => setState(() => _showFrameList = false),
+                if (!_showFrameList)
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        _buildCanvas(currentFrame),
+                        Positioned(
+                          top: 4,
+                          left: 4,
+                          child: IconButton(
+                            icon: const Icon(Icons.menu, size: 30),
+                            onPressed:
+                                () => setState(() => _showFrameList = true),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                if (_showFrameList) Expanded(child: _buildCanvas(currentFrame)),
+              ],
             ),
-          if (!_showFrameList)
-            Expanded(
-              child: Stack(
-                children: [
-                  _buildCanvas(currentFrame),
-                  Positioned(
-                    top: 4,
-                    left: 4,
-                    child: IconButton(
-                      icon: const Icon(Icons.menu, size: 30),
-                      onPressed: () => setState(() => _showFrameList = true),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          if (_showFrameList) Expanded(child: _buildCanvas(currentFrame)),
+          ),
         ],
-      ),
-    ),
-  ],
       ),
     );
   }
@@ -293,7 +402,8 @@ class _DrawingPageState extends State<DrawingPage> {
       onColorChanged: (c) => setState(() => _selectedColor = c),
       onStrokeWidthChanged: (v) => setState(() => _strokeWidth = v),
       onEraserToggled: () => setState(() => _isEraser = !_isEraser),
-      onClear: () => setState(() => _frames[_currentFrameIndex] = FrameData.empty()),
+      onClear:
+          () => setState(() => _frames[_currentFrameIndex] = FrameData.empty()),
       fpsController: _fpsController,
       showOnionSkin: _showOnionSkin,
       onionSkinCount: _onionSkinCount,

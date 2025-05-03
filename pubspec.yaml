@@ -39,6 +39,7 @@ dependencies:
   transparent_image: ^2.0.1
   path_provider: ^2.0.14
   shared_preferences: ^2.2.2
+  material_symbols_icons: ^4.2815.0
 
 dev_dependencies:
   flutter_test:
