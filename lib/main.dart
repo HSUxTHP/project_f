@@ -1,5 +1,6 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_testing/widgets/layout.dart';
 import 'pages/drawing_page.dart';
 
 void main() {
@@ -18,7 +19,7 @@ class DrawingApp extends StatelessWidget {
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
       ),
-      home: const DrawingPage(),
+      home: const Layout(),
     );
   }
 }
