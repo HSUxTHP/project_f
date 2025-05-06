@@ -28,7 +28,49 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Create Project"),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              spacing: 16,
+                              children: [
+                                TextField(
+                                  decoration: InputDecoration(
+                                    labelText: "Project Name*",
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                                TextField(
+                                  decoration: InputDecoration(
+                                    labelText: "Project Description",
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Close the dialog
+                                },
+                                child: Text("Close"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  // Handle project creation logic here
+                                  Navigator.of(context).pop(); // Close the dialog
+                                },
+                                child: Text("Create"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
                     icon: Icon(
                         Icons.add_circle_outline,
                         size: 32
