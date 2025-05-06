@@ -40,83 +40,80 @@ class BottomToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
-      color: Theme.of(context).colorScheme.surfaceVariant,
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+      color: const Color(0xFFE0E3E7), // ✅ màu nền toolbar sáng
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Color Picker
+          // Màu
           GestureDetector(
             onTap: () => _showAdvancedColorDialog(context),
             child: Container(
-              width: 32,
-              height: 32,
+              width: 20,
+              height: 20,
+              margin: const EdgeInsets.symmetric(horizontal: 6),
               decoration: BoxDecoration(
                 color: selectedColor,
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.black45),
+                border: Border.all(color: Colors.black26),
               ),
             ),
           ),
 
-          //  Brush Size
+          // Kích thước nét
           GestureDetector(
             onTap: () => _showSizeDialog(context),
             child: Container(
-              padding: const EdgeInsets.all(6),
+              padding: const EdgeInsets.all(4),
+              margin: const EdgeInsets.symmetric(horizontal: 4),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.black45),
+                border: Border.all(color: Colors.black26),
               ),
               child: Text(
                 strokeWidth.round().toString(),
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
               ),
             ),
           ),
 
-          // Eraser Toggle
-          IconButton(
-            icon: Icon(isEraser ? Icons.brush : Icons.cleaning_services),
-            tooltip: isEraser ? 'Switch to Brush' : 'Switch to Eraser',
-            onPressed: onEraserToggled,
-          ),
+          // Các icon chức năng
+          _toolbarIcon(Icons.cleaning_services, onEraserToggled, isEraser ? 'Brush' : 'Eraser'),
+          _toolbarIcon(Icons.undo, onUndo, 'Undo'),
+          _toolbarIcon(Icons.redo, onRedo, 'Redo'),
+          _toolbarIcon(Icons.clear, onClear, 'Clear Canvas'),
+          _toolbarIcon(Icons.speed, () => _showFpsDialog(context), 'Set FPS'),
 
-          //  Undo
-          IconButton(
-            icon: const Icon(Icons.undo),
-            tooltip: 'Undo',
-            onPressed: onUndo,
-          ),
-
-          //  Redo
-          IconButton(
-            icon: const Icon(Icons.redo),
-            tooltip: 'Redo',
-            onPressed: onRedo,
-          ),
-
-          //  Clear
-          IconButton(
-            icon: const Icon(Icons.clear),
-            tooltip: 'Clear Canvas',
-            onPressed: onClear,
-          ),
-
-          // ️ FPS chỉnh
-          IconButton(
-            icon: const Icon(Icons.speed),
-            tooltip: 'Set FPS',
-            onPressed: () => _showFpsDialog(context),
-          ),
-
-          //  Save
-          FilledButton.icon(
-            onPressed: onSave,
-            icon: const Icon(Icons.save),
-            label: const Text('Save'),
+          // Nút Save
+          SizedBox(
+            height: 36,
+            child: FilledButton.icon(
+              style: FilledButton.styleFrom(
+                backgroundColor: const Color(0xFF4B5EA3), // ✅ xanh đậm
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                textStyle: const TextStyle(fontSize: 12),
+              ),
+              onPressed: onSave,
+              icon: const Icon(Icons.save, size: 16),
+              label: const Text('Save'),
+            ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _toolbarIcon(IconData icon, VoidCallback? onPressed, String tooltip) {
+    return SizedBox(
+      width: 36,
+      height: 36,
+      child: IconButton(
+        iconSize: 18,
+        padding: EdgeInsets.zero,
+        tooltip: tooltip,
+        onPressed: onPressed,
+        icon: Icon(icon, color: Colors.black87), // ✅ icon màu đen nhạt
       ),
     );
   }
@@ -165,7 +162,6 @@ class BottomToolbar extends StatelessWidget {
                   )),
                 ],
               ),
-              const SizedBox(height: 12),
               if (recentColors.isNotEmpty) ...[
                 const Divider(),
                 const Text('🕘 Màu gần đây'),
