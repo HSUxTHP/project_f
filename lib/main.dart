@@ -1,6 +1,6 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_testing/widgets/layout.dart';
+import 'package:flutter_testing/widgets/widgets_layout/layout.dart';
 import 'pages/drawing_page.dart';
 
 void main() {

@@ -1,112 +1,90 @@
 import 'package:flutter/material.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class SecondTopToolbar extends StatelessWidget {
-  const SecondTopToolbar({super.key});
+  final VoidCallback onBack;
+  final VoidCallback onCopy;
+  final VoidCallback onPaste;
+  final VoidCallback onGenerateTween;
+  final VoidCallback onToggleOnionSkin;
+  final bool showOnionSkin;
+  final int onionSkinCount;
+  final ValueChanged<int> onOnionSkinCountChanged;
+  final VoidCallback onTogglePlay;
+  final bool isPlaying;
+
+  const SecondTopToolbar({
+    super.key,
+    required this.onBack,
+    required this.onCopy,
+    required this.onPaste,
+    required this.onGenerateTween,
+    required this.onToggleOnionSkin,
+    required this.showOnionSkin,
+    required this.onionSkinCount,
+    required this.onOnionSkinCountChanged,
+    required this.onTogglePlay,
+    required this.isPlaying,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 4),
-      color: Color(0xFF43474E),
-      padding: const EdgeInsets.symmetric(horizontal: 8),
       height: 50,
+      decoration: const BoxDecoration(
+        color: Colors.white70,
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.black54,
+            width: 1,
+          ),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            color: Color(0xFFE1E2E9),
-            onPressed: () {}, // TODO: Add settings logic
+          Container(
+              child: _iconButton(Icons.arrow_back, onBack),
+            decoration: BoxDecoration(
+              border: Border(
+                right: BorderSide(
+                  color: Colors.black54,
+                  width: 1,
+                ),
+              )
+            ),
           ),
-          IconButton(
-            icon: const Icon(Icons.save),
-            color: Color(0xFFE1E2E9),
-            onPressed: () {}, // TODO: Add save logic
+          _iconButton(Icons.copy, onCopy),
+          _iconButton(Icons.paste, onPaste),
+          _iconButton(Icons.auto_fix_high, onGenerateTween),
+          _iconButton(
+            showOnionSkin ? Icons.layers_clear : Icons.layers,
+            onToggleOnionSkin,
           ),
-          IconButton(
-            icon: const Icon(Icons.share),
-            color: Color(0xFFE1E2E9),
-            onPressed: () {}, // TODO: Add share logic
+          PopupMenuButton<int>(
+            initialValue: onionSkinCount,
+            onSelected: onOnionSkinCountChanged,
+            icon: const Icon(Icons.filter_frames, size: 20),
+            itemBuilder: (_) => [
+              for (int i = 1; i <= 5; i++)
+                PopupMenuItem(value: i, child: Text('$i Onion Frame')),
+            ],
           ),
-          const VerticalDivider(),
-          IconButton(
-            icon: const Icon(Icons.undo),
-            color: Color(0xFFE1E2E9),
-            onPressed: () {}, // TODO: Add share logic
-          ),
-          IconButton(
-            icon: const Icon(Icons.redo),
-            color: Color(0xFFE1E2E9),
-            onPressed: () {}, // TODO: Add redo logic
-          ),
-          const VerticalDivider(),
-          IconButton(
-            icon: const Icon(Icons.select_all),
-            color: Color(0xFFE1E2E9),
-            onPressed: () {}, // TODO: Add select_all logic
-          ),
-          const VerticalDivider(),
-          IconButton(
-            icon: const Icon(Symbols.diagonal_line),
-            color: Color(0xFFE1E2E9),
-            onPressed: () {}, // TODO: Add logic
-          ),
-          IconButton(
-            icon: const Icon(Symbols.conversion_path),
-            color: Color(0xFFE1E2E9),
-            onPressed: () {}, // TODO: Add logic
-          ),
-          const VerticalDivider(),
-          IconButton(
-            icon: const Icon(Symbols.stylus),
-            color: Color(0xFFE1E2E9),
-            onPressed: () {}, // TODO: Add logic
-          ),
-          IconButton(
-            icon: const Icon(Icons.format_color_fill),
-            color: Color(0xFFE1E2E9),
-            onPressed: () {}, // TODO: Add color logic
-          ),
-          IconButton(
-            icon: const Icon(Symbols.match_case),
-            color: Color(0xFFE1E2E9),
-            onPressed: () {}, // TODO: Add logic
-          ),
-          IconButton(
-            icon: const Icon(Symbols.ink_eraser),
-            color: Color(0xFFE1E2E9),
-            onPressed: () {}, // TODO: Add logic
-          ),
-          IconButton(
-            icon: const Icon(Icons.colorize),
-            color: Color(0xFFE1E2E9),
-            onPressed: () {}, // TODO: Add logic
-          ),
-          const VerticalDivider(),
-          IconButton(
-            icon: const Icon(Icons.square_outlined),
-            color: Color(0xFFE1E2E9),
-            onPressed: () {}, // TODO: Add logic
-          ),
-          IconButton(
-            icon: const Icon(Icons.brightness_1_outlined),
-            color: Color(0xFFE1E2E9),
-            onPressed: () {}, // TODO: Add logic
-          ),
-          IconButton(
-            icon: const Icon(Icons.change_history),
-            color: Color(0xFFE1E2E9),
-            onPressed: () {}, // TODO: Add logic
-          ),
-          const VerticalDivider(),
-          IconButton(
-            icon: const Icon(Icons.mic),
-            color: Color(0xFFE1E2E9),
-            onPressed: () {}, // TODO: Add logic
+          _iconButton(
+            isPlaying ? Icons.stop : Icons.play_arrow,
+            onTogglePlay,
           ),
         ],
       ),
+    );
+  }
+
+  Widget _iconButton(IconData icon, VoidCallback onPressed) {
+    return IconButton(
+      onPressed: onPressed,
+      icon: Icon(icon, size: 20, color: Colors.black87),
+      padding: EdgeInsets.zero,
+      visualDensity: VisualDensity.compact,
+      tooltip: icon.toString(),
     );
   }
 }

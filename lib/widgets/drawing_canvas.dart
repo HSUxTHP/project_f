@@ -216,10 +216,11 @@ class _DrawingCanvasState extends State<DrawingCanvas> {
             child: Container(
               margin: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(24), // ✅ bo tròn hơn
                 color: Colors.white,
-                border: Border.all(color: Colors.black12),
+                border: Border.all(color: Colors.grey.shade300), // ✅ border sáng
               ),
+
               child: Stack(
                 children: [
                   if (isDrawing && widget.showOnionSkin)
