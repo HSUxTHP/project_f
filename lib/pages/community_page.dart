@@ -4,79 +4,53 @@ import 'package:flutter_testing/widgets/widgets_card_community/card_community.da
 class CommunityPage extends StatelessWidget {
   const CommunityPage({super.key});
 
+  final List<String> tabs = const ['Trending', 'Newest', 'Most Liked'];
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: tabs.length,
       child: Scaffold(
-        backgroundColor: const Color(0xFFF9F9F9),
         appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.white,
-          elevation: 3,
-          shadowColor: Colors.black12,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(16),
-            ),
-          ),
-          bottom: const PreferredSize(
-            preferredSize: Size.fromHeight(48),
-            child: TabBar(
-              isScrollable: true,
-              indicatorColor: Colors.black,
-              indicatorWeight: 2.5,
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.grey,
-              labelStyle: TextStyle(fontWeight: FontWeight.w600),
-              tabs: [
-                Tab(icon: Icon(Icons.grid_view), text: 'Tất Cả'),
-                Tab(icon: Icon(Icons.star), text: 'Top'),
-                Tab(icon: Icon(Icons.trending_up), text: 'Trending'),
-                Tab(icon: Icon(Icons.favorite), text: 'Lượt thích'),
-              ],
-            ),
+          title: const Text('Community'),
+          centerTitle: true,
+          backgroundColor: Colors.blueGrey[50],
+          foregroundColor: Colors.black,
+          elevation: 1,
+          bottom: TabBar(
+            isScrollable: true,
+            labelColor: Colors.black,
+            indicatorColor: Colors.blueAccent,
+            tabs: tabs.map((tab) => Tab(text: tab)).toList(),
           ),
         ),
-        body: const TabBarView(
-          children: [
-            ProjectGrid(category: "Tất cả"),
-            ProjectGrid(category: "Top"),
-            ProjectGrid(category: "Trending"),
-            ProjectGrid(category: "Lượt thích"),
-          ],
+        body: Padding(
+          padding: const EdgeInsets.all(12),
+          child: TabBarView(
+            children: tabs.map((tab) {
+              return GridView.builder(
+                itemCount: 12,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 3 / 3.2,
+                ),
+                itemBuilder: (context, index) {
+                  return CardCommunity(
+                    imageUrl: 'https://picsum.photos/500/300?random=$index',
+                    duration: '3:24',
+                    name: '$tab Project $index',
+                    uploader: 'User $index',
+                    likes: 20 + index,
+                    comments: 5 + index,
+                  );
+                },
+              );
+            }).toList(),
+          ),
         ),
       ),
-    );
-  }
-}
-
-class ProjectGrid extends StatelessWidget {
-  final String category;
-  const ProjectGrid({super.key, required this.category});
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      padding: const EdgeInsets.all(16),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        childAspectRatio: 1.0,
-      ),
-      itemCount: 12,
-      itemBuilder: (context, index) {
-        return CardCommunity(
-          imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3jL6gUvfFslb4OCAOMuiKL7lnxRIByo-e5I_ub2RSdqmkMVCX1rOa6YcfFUXRcxTvOSY&usqp=CAU",
-          duration: "04:12",
-          name: "Project ${index + 1}",
-          uploader: "Người đăng",
-          description: "Describe: No describe",
-          likes: index * 2,
-          comments: index,
-        );
-      },
     );
   }
 }
